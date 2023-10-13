@@ -2,11 +2,15 @@ import React from 'react';
 import styled from 'styled-components';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import ChecklistRtlIcon from '@mui/icons-material/ChecklistRtl';
-import Notes from './Notes';
+import Notes from '../components/Notes';
 import Popup from 'reactjs-popup';
-import Note_Link from './Note_Link';
-import Checklist_Link from './Checklist_Link'
-import CheckList from './CheckList';
+import Note_Link from '../components/Note_Link';
+import Checklist_Link from '../components/Checklist_Link'
+import CheckList from '../components/CheckList';
+import { useContext } from 'react';
+import NoteContext from '../context/notes/noteContext';
+import ChecklistContext from '../context/checklists/checklistContext';
+
 const Container=styled.div`
     width: 100vw;
     box-sizing: border-box;
@@ -57,7 +61,11 @@ const Button=styled.div`
     cursor: pointer;
 `;
 export default function Notebook() {
-  return (
+  
+    const {noteState,setNoteState}=useContext(NoteContext);
+    const {checklistState,setChecklistState}=useContext(ChecklistContext);
+    
+    return (
     <Container>
          <Head>
             First Notebook
@@ -67,18 +75,28 @@ export default function Notebook() {
             </Add>
         </Head>
         <Wrapper>
-            <Popup
-                trigger={<Button><Note_Link/></Button>}
-                modal nested
-                >
-                <Notes/>
-            </Popup>
-            <Popup
-                trigger={<Button><Checklist_Link/></Button>}
-                modal nested
-                >
-                <CheckList/>
-            </Popup>
+            {
+                noteState.map((note)=>(
+                    <Popup key={note._id}
+                        trigger={<Button><Note_Link note={note}/></Button>}
+                        modal nested
+                        >
+                        <Notes note={note}/>
+                    </Popup>
+
+                ))
+            }
+            {
+                checklistState.map((checklist)=>(
+                    <Popup key={checklist._id}
+                        trigger={<Button><Checklist_Link checklist={checklist}/></Button>}
+                        modal nested
+                        >
+                        <CheckList checklist={checklist}/>
+                    </Popup>
+
+                ))
+            }
         </Wrapper>
       
     </Container>

@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 
 const Container=styled.div`
     position: relative;
@@ -13,27 +15,63 @@ const Container=styled.div`
     }
 `;
 
-const TextArea=styled.div`
+const Title=styled.div`
+    font-size: 20px;
+    overflow: hidden;
+    font-weight: 500;
     text-overflow: ellipsis;
+    padding: 10px;
+`;
+
+const TextArea=styled.div`
+    height: 130px;
     overflow: hidden; 
-    white-space: nowrap;
+    gap: 5px;
 `;
 
 const Time=styled.div`
     position: absolute;
     left: 5px;
     bottom: 5px;
-    opacity: 0.5;
-    font-size: 14px;
+    opacity: 0.7;
+    font-size: 12px;
 `;
 
-export default function Note_Link() {
+const Item=styled.div`
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+`;
+
+export default function Note_Link(props) {
+    const checklist=props.checklist;
   return (
     <Container>
+        <Title>{checklist.title}</Title>
         <TextArea>
-            CheckList
+            
+                {
+                    checklist.list.map((item)=>{
+                        if(item.done){
+                            return <Item>
+                                <CheckBoxIcon/>
+                                {item.value}
+                                </Item>
+                        }
+                        else{
+                            return  <Item>
+                                <CheckBoxOutlineBlankIcon/>
+                                {item.value}
+                            </Item>
+                        }
+                    }
+                    )
+                }
+           
         </TextArea>
-        <Time>Today</Time>
+        <Time>{checklist.date}</Time>
     </Container>
   );
 }

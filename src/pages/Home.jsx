@@ -1,8 +1,10 @@
-import React from 'react';
+import React,{useContext} from 'react';
 import styled from 'styled-components'
 import Notebook_Link from '../components/Notebook_Link';
 import AddIcon from '@mui/icons-material/Add';
 import { Link } from 'react-router-dom';
+import Navbar from '../components/Navbar';
+import NotebookContext from '../context/notebooks/notebookContext';
 
 const Container=styled.div`
     width: 100vw;
@@ -47,16 +49,25 @@ const Links=styled(Link)`
 `;
 
 export default function Home() {
+
+    const {notebookState,setNotebookState}=useContext(NotebookContext);
+    
   return (
-    <Container>
-        <Head>
-            Notebooks
-            <AddNotebook><AddIcon/> Notebook</AddNotebook>
-        </Head>
-        <Wrapper>
-            <Links><Notebook_Link/></Links>
-            <Links><Notebook_Link/></Links>
-        </Wrapper>
-    </Container>
+    <>
+        <Navbar/>
+        <Container>
+            <Head>
+                Notebooks
+                <AddNotebook><AddIcon/> Notebook</AddNotebook>
+            </Head>
+            <Wrapper>
+                {
+                    notebookState.map((notebook)=>(
+                        <Links key={notebook._id} to={`/${notebook._id}`}><Notebook_Link title={notebook.title}/></Links>
+                    ))
+                }
+            </Wrapper>
+        </Container>
+    </>
   );
 }

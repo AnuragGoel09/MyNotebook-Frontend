@@ -39,12 +39,12 @@ const Name=styled.div`
   font-weight: 400;
 `;
 
-export default function Notebook_Link() {
+export default function Notebook_Link(props) {
   return (
     <Container>
       <Img src='./notebook-cover/pattern1.jpg'/>
       <Edit><EditNoteOutlinedIcon/></Edit>
-      <Name>First Notebook</Name>
+      <Name>{props.title}</Name>
     </Container>
   );
 }

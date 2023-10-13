@@ -1,7 +1,8 @@
-import React from 'react';
+import React ,{useState}from 'react';
 import styled from 'styled-components';
 import DoneOutlinedIcon from '@mui/icons-material/DoneOutlined';
 import AddIcon from '@mui/icons-material/Add';
+import CheckBox from '@mui/icons-material/CheckBox';
 const Container=styled.div`
     width: 70vw;
     height: 90vh;
@@ -67,12 +68,33 @@ const SaveButton=styled.div`
     }
 `;
 
-export default function Notes() {
+const Item=styled.div`
+    width: 100%;
+    background-color: red;
+    padding: 20px;
+`;
+
+export default function Notes(props) {
+    const checklist=props.checklist;
+    const [title,setTitle]=useState(checklist.title);
+    // const [desc,setDesc]=useState(note.desc);
+    const changeTitle=(e)=>{
+        setTitle(e.target.value);
+    }
+    // const changeDesc=(e)=>{
+    //     setDesc(e.target.value);
+    // }
   return (
     <Container>
-        <Title value="Untitled"/>
+        <Title value={title} onChange={changeTitle}/>
         <List>
-            {/* <Item><Check></Check></Item> */}
+            {
+                checklist.list.map((item,idx)=>{
+                    <Item key={item}>
+                        <CheckBox/>{item.value}
+                    </Item>
+                })
+            }
         </List>
         <AddItem><AddIcon/></AddItem>
         <SaveButton><DoneOutlinedIcon/></SaveButton>

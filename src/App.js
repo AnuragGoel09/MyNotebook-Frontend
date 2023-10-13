@@ -1,26 +1,39 @@
 import './App.css';
-import Navbar from './components/Navbar';
-import Notebook from './components/Notebook';
 import Home from './pages/Home';
 import styled from 'styled-components';
 import { BrowserRouter ,Routes,Route} from "react-router-dom";
 import All_Notes from './pages/All_Notes';
-
+import Login from './pages/Login';
+import SignUp from './pages/SignUp';
+import NoteState from './context/notes/noteState';
+import NotebookState from './context/notebooks/notebookState';
+import ChecklistState from './context/checklists/checklistState'
+import Notebook from './pages/Notebook';
 const Container=styled.div`
   background-color: rgba(0,0,0,0.05);
 `;
 
 function App() {
   return (
-    <BrowserRouter>
-      <Container>
-          <Navbar/> 
-          <Routes>
-            <Route exact path="/" element={<Home/>} />
-            <Route exact path="/allnotes" element={<All_Notes/>} />
-          </Routes>
-      </Container>
-    </BrowserRouter>
+    <>
+    <NotebookState>
+      <NoteState>
+        <ChecklistState>
+          <BrowserRouter>
+            <Container>
+                <Routes>
+                  <Route exact path="/login" element={<Login/>} />
+                  <Route exact path="/signup" element={<SignUp/>} />
+                  <Route exact path="/" element={<Home/>} />
+                  <Route exact path="/allnotes" element={<All_Notes/>} />
+                  <Route exact path="/:notebookId" element={<Notebook/>} />
+                </Routes>
+            </Container>
+          </BrowserRouter>
+        </ChecklistState>
+      </NoteState>
+    </NotebookState>  
+    </>
   );
 }
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import DoneOutlinedIcon from '@mui/icons-material/DoneOutlined';
 const Container=styled.div`
@@ -53,14 +53,20 @@ const SaveButton=styled.div`
     }
 `;
 
-export default function Notes() {
+export default function Notes(props) {
+    const note=props.note;
+    const [title,setTitle]=useState(note.title);
+    const [desc,setDesc]=useState(note.desc);
+    const changeTitle=(e)=>{
+        setTitle(e.target.value);
+    }
+    const changeDesc=(e)=>{
+        setDesc(e.target.value);
+    }
   return (
     <Container>
-        <Title value="Untitled"/>
-        <TextArea>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Veritatis, nam placeat. Voluptatem aliquam laudantium tempora, incidunt ratione magnam dicta nemo deleniti consequuntur tempore officiis! Eum reprehenderit ut incidunt aspernatur non.
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Magni dolores atque odit pariatur ullam optio perferendis voluptas hic dolorum? At numquam eligendi qui sed magni nulla, eveniet incidunt veniam sequi!
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Magni dolores atque odit pariatur ullam optio perferendis voluptas hic dolorum? At numquam eligendi qui sed magni nulla, eveniet incidunt veniam sequi!
+        <Title value={title} onChange={changeTitle}/>
+        <TextArea onChange={changeDesc} value={desc}>
         </TextArea>
         <SaveButton><DoneOutlinedIcon/></SaveButton>
     </Container>

@@ -13,28 +13,38 @@ const Container=styled.div`
     }
 `;
 
-const TextArea=styled.div`
+const Title=styled.div`
+    font-size: 20px;
+    overflow: hidden;
+    font-weight: 500;
     text-overflow: ellipsis;
+    padding: 10px;
+`;
+
+const TextArea=styled.div`
     overflow: hidden; 
-    white-space: nowrap;
+    white-space: wrap;
+    height: 130px;
+    text-overflow: ellipsis;
 `;
 
 const Time=styled.div`
     position: absolute;
     left: 5px;
     bottom: 5px;
-    opacity: 0.5;
-    font-size: 14px;
+    opacity: 0.7;
+    font-size: 12px;
 `;
 
-export default function Note_Link() {
+export default function Note_Link(props){
+    const note=props.note;
   return (
     <Container>
+        <Title>{note.title}</Title>
         <TextArea>
-            Lorem ipsum, dolor sit amet consectetur adipisicing elit. Quis nesciunt, ab.
-            cbhdbvhfbvhdcbhvbhkbhfbcvjnajncdbvdsnnsdjvndjnvklsnvjkbfvbfjk
+            {note.desc}
         </TextArea>
-        <Time>Today</Time>
+        <Time>{note.date}</Time>
     </Container>
   );
 }

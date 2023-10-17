@@ -10,7 +10,7 @@ const Container=styled.div`
   box-sizing: border-box;
   position: relative;
   display: flex;
-  justify-content: right;
+  justify-content: center;
   align-items: center;
   padding: 100px;
 `;
@@ -85,6 +85,15 @@ const Linkitem=styled(Link)`
         color: red;
     }
 `;
+const Error=styled.div`
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: red;
+    font-size: 20px;
+`;
+
 
 export default function SignUp() {
     const {setLoginState}=useContext(LoginContext);
@@ -94,6 +103,8 @@ export default function SignUp() {
     const [email,setEmail]=useState("");
     const [pass,setPass]=useState("");
     const [authtoken,setAuthtoken]=useState(null);
+    const [error,setError]=useState(null);
+
     const navigate = useNavigate()
     useEffect(()=>{
         localStorage.removeItem('user')
@@ -117,17 +128,25 @@ export default function SignUp() {
               })
               .then((responseData) => {
                     setAuthtoken(responseData.authtoken);
-                    console.log(responseData)
+                    if(responseData.error)
+                        setError(responseData.error)
+                    // console.log(responseData)
               })
               .catch((error) => {
                 // Handle any errors that occur during the request
-                console.error('Error:', error);
+                    setError("Internal Server Error");
               });
         } catch (error) {
-            console.log(error)
+            setError("Internal Server Error");
         }
     };
-
+    useEffect(()=>{
+        if(error){
+            setInterval(()=>{
+                setError(null);
+            },2000)
+        }
+    },[error])
     useEffect(()=>{
             
         const getUser=async()=>{
@@ -178,6 +197,7 @@ export default function SignUp() {
                 <Create>
                     <Linkitem to="/login">Login Account</Linkitem>
                 </Create>
+                <Error>{error}</Error>
             </Box>
     </Container>
   );

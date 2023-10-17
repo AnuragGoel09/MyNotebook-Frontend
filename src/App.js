@@ -9,6 +9,7 @@ import NoteState from './context/notes/noteState';
 import NotebookState from './context/notebooks/notebookState';
 import ChecklistState from './context/checklists/checklistState'
 import Notebook from './pages/Notebook';
+import LoginState from './context/login/loginState';
 const Container=styled.div`
   background-color: rgba(0,0,0,0.05);
 `;
@@ -16,23 +17,25 @@ const Container=styled.div`
 function App() {
   return (
     <>
-    <NotebookState>
-      <NoteState>
-        <ChecklistState>
-          <BrowserRouter>
-            <Container>
-                <Routes>
-                  <Route exact path="/login" element={<Login/>} />
-                  <Route exact path="/signup" element={<SignUp/>} />
-                  <Route exact path="/" element={<Home/>} />
-                  <Route exact path="/allnotes" element={<All_Notes/>} />
-                  <Route exact path="/:notebookId" element={<Notebook/>} />
-                </Routes>
-            </Container>
-          </BrowserRouter>
-        </ChecklistState>
-      </NoteState>
-    </NotebookState>  
+    <LoginState>
+      <NotebookState>
+        <NoteState>
+          <ChecklistState>
+            <BrowserRouter>
+              <Container>
+                  <Routes>
+                    <Route exact path="/login" element={<Login/>} />
+                    <Route exact path="/signup" element={<SignUp/>} />
+                    <Route exact path="/" element={<Home/>} />
+                    <Route exact path="/allnotes" element={<All_Notes/>} />
+                    <Route exact path="/:notebookId" element={<Notebook/>} />
+                  </Routes>
+              </Container>
+            </BrowserRouter>
+          </ChecklistState>
+        </NoteState>
+      </NotebookState> 
+    </LoginState> 
     </>
   );
 }

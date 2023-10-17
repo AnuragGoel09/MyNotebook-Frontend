@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import DoneOutlinedIcon from '@mui/icons-material/DoneOutlined';
+import { useContext } from 'react';
+import NoteContext from '../context/notes/noteContext';
 const Container=styled.div`
     width: 70vw;
     height: 90vh;
-    background-color: lightblue;
+    background-color: lightpink;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -53,10 +55,27 @@ const SaveButton=styled.div`
     }
 `;
 
+const Delete=styled.div`
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    padding: 3px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    &:hover{
+        background-color: rgba(0,0,0,0.1);
+    }
+`;
+
 export default function Notes(props) {
     const note=props.note;
     const [title,setTitle]=useState(note.title);
     const [desc,setDesc]=useState(note.desc);
+    const {editNote}=useContext(NoteContext);
+    const [show,setShow]=useState(false);
     const changeTitle=(e)=>{
         setTitle(e.target.value);
     }
@@ -64,11 +83,23 @@ export default function Notes(props) {
         setDesc(e.target.value);
     }
   return (
+    <>
     <Container>
         <Title value={title} onChange={changeTitle}/>
         <TextArea onChange={changeDesc} value={desc}>
         </TextArea>
-        <SaveButton><DoneOutlinedIcon/></SaveButton>
+        
+        <SaveButton onClick={()=>{
+            editNote(note._id,title,desc);
+            setShow(true);
+            setTimeout(() => {
+                    setShow(false);
+            }, 2000);
+        }}>
+        {!show && <DoneOutlinedIcon/>}
+        {show && "Saved"}
+        </SaveButton>
     </Container>
+    </>
   );
 }

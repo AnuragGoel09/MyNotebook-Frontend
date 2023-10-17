@@ -9,7 +9,7 @@ const Container=styled.div`
     height: 210px;
     box-sizing: border-box;
     padding: 10px;
-    background-color: #7ae47a;
+    background-color: lightblue;
     &:hover{
         box-shadow: 0.5px 0.5px 4px #888888;
     }
@@ -17,10 +17,12 @@ const Container=styled.div`
 
 const Title=styled.div`
     font-size: 20px;
+    height: 20px;
+    text-overflow: ellipsis;
     overflow: hidden;
     font-weight: 500;
-    text-overflow: ellipsis;
     padding: 10px;
+    word-wrap: break-word;
 `;
 
 const TextArea=styled.div`

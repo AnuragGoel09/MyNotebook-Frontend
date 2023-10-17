@@ -1,10 +1,13 @@
-import React,{useContext} from 'react';
+import React,{useContext, useEffect} from 'react';
 import styled from 'styled-components'
 import Notebook_Link from '../components/Notebook_Link';
 import AddIcon from '@mui/icons-material/Add';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import NotebookContext from '../context/notebooks/notebookContext';
+import LoginContext from '../context/login/loginContext';
+import Cookies from 'js-cookie';
+
 
 const Container=styled.div`
     width: 100vw;
@@ -47,23 +50,27 @@ const Wrapper=styled.div`
 const Links=styled(Link)`
     text-decoration: none;
 `;
-
 export default function Home() {
-
-    const {notebookState,setNotebookState}=useContext(NotebookContext);
-    
+    const {loginState}=useContext(LoginContext);
+    const {notebooks,addNotebook,editNotebook,deleteNotebook,getNotebooks}=useContext(NotebookContext);
+    useEffect(()=>{
+        if(loginState)
+            getNotebooks();
+    },[])
   return (
-    <>
+    <>{loginState===null && <Navigate to="/login"/>}
         <Navbar/>
         <Container>
             <Head>
                 Notebooks
-                <AddNotebook><AddIcon/> Notebook</AddNotebook>
+                <AddNotebook onClick={()=>{
+                addNotebook();
+                }}><AddIcon/> Notebook</AddNotebook>
             </Head>
             <Wrapper>
                 {
-                    notebookState.map((notebook)=>(
-                        <Links key={notebook._id} to={`/${notebook._id}`}><Notebook_Link title={notebook.title}/></Links>
+                    notebooks.map((notebook)=>(
+                        <Notebook_Link notebook={notebook}/>
                     ))
                 }
             </Wrapper>

@@ -90,6 +90,7 @@ export default function Login() {
     const navigate = useNavigate();
     const [progress,updateProgress]=useState(0);
     useEffect(()=>{
+        setLoginState(null);
         localStorage.removeItem('user')
     },[])
     

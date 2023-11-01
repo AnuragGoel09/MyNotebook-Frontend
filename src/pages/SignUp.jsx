@@ -92,6 +92,7 @@ export default function SignUp() {
     const navigate = useNavigate()
     updateProgress(0);
     useEffect(()=>{
+        setLoginState(null);
         localStorage.removeItem('user')
     },[])
     

@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import LoginContext from '../context/login/loginContext';
 import PortraitIcon from '@mui/icons-material/Portrait';
+import { mobile ,tablet} from '../responsive';
 const Container=styled.div`
     width: 100vw;
     display: flex;
@@ -12,9 +13,13 @@ const Container=styled.div`
     height: 50px;
     padding: 0px 10px;
     background-color: white;
+    ${tablet({flexDirection:'column',height:'fit-content'})}
 `;
 
-const Left=styled.div``;
+const Left=styled.div`
+  ${mobile({width:'100%',textAlign:'left',marginBottom:'5px'})}
+  ${tablet({marginBottom:'5px'})}
+`;
 
 const Logo=styled.span`
     font-size: 20px;
@@ -68,6 +73,7 @@ const Right=styled.div`
   box-sizing: border-box;
   padding: 15px;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
+  ${tablet({width:'100%',justifyContent:'space-between'})}
 `;
 
 export default function Navbar() {

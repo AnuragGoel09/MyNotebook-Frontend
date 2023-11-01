@@ -12,6 +12,7 @@ import Notebook from './pages/Notebook';
 import LoginState from './context/login/loginState';
 const Container=styled.div`
   background-color: rgba(0,0,0,0.05);
+  box-sizing: border-box;
 `;
 
 function App() {

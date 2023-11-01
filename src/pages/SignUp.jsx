@@ -5,6 +5,8 @@ import LoginContext from '../context/login/loginContext';
 import axios from 'axios'
 import LoadingBar from 'react-top-loading-bar'
 import {apiURL} from '../config';
+import { mobile} from '../responsive';
+
 const Container=styled.div`
     width: 100vw;
     height: 100vh;
@@ -13,7 +15,7 @@ const Container=styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 100px;
+  padding: 10px;
 `;
 const Img=styled.img`
     position: absolute;
@@ -34,6 +36,7 @@ const Box=styled.div`
     padding: 50px;
     border-radius: 20px;
     gap: 20px;
+    ${mobile({gap:'10px',width:'100%'})} 
 `;
 const Head=styled.div`
     font-size: 22px;
@@ -48,6 +51,7 @@ const Input=styled.input`
     padding: 5px;
     border-bottom: 1px solid grey;
     font-size: 20px;
+    ${mobile({fontSize:'16px'})}
 `;
 const Submit=styled.button`
     width: 100%;
@@ -60,6 +64,7 @@ const Submit=styled.button`
     &:hover{
         background-color: cyan;
     }
+    ${mobile({fontSize:'16px'})}
 `;
 const Create=styled.div`
     width: 100%;
@@ -89,8 +94,8 @@ export default function SignUp() {
     const [authtoken,setAuthtoken]=useState(null);
     const [error,setError]=useState(null);
     const [progress,updateProgress]=useState(0);
+    
     const navigate = useNavigate()
-    updateProgress(0);
     useEffect(()=>{
         setLoginState(null);
         localStorage.removeItem('user')

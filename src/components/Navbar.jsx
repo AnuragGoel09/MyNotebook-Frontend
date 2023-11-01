@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
+import LoginContext from '../context/login/loginContext';
+import PortraitIcon from '@mui/icons-material/Portrait';
 const Container=styled.div`
     width: 100vw;
     display: flex;
@@ -40,9 +42,37 @@ const Item=styled(Link)`
     cursor: pointer;
 `;
 
-const Right=styled.div``;
+const Name=styled.span`
+font-size: 18px;
+display: flex;
+align-items: center;
+gap: 5px;
+`;
+
+const Logout=styled(Link)`
+  cursor: pointer;
+  text-decoration: none;
+  padding: 8px;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+  &:hover{
+    transform: scale(1.1);
+    background-color: rgba(0,0,0,0.1);
+  }
+`;
+
+const Right=styled.div`
+  display: flex;
+  align-items: center;
+  gap: 30px;
+  box-sizing: border-box;
+  padding: 15px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+`;
 
 export default function Navbar() {
+
+  const {loginState}=useContext(LoginContext);
   return (
     <Container>
       <Left>
@@ -55,7 +85,8 @@ export default function Navbar() {
             </Menu>
       </Center>
       <Right>
-
+          <Name><PortraitIcon/> {loginState?loginState.name:' '}</Name>
+          <Logout to="/login">Logout</Logout>
       </Right>
     </Container>
   );

@@ -3,7 +3,8 @@ import { Link ,useNavigate} from 'react-router-dom';
 import styled from 'styled-components';
 import LoginContext from '../context/login/loginContext';
 import axios from 'axios';
-
+import LoadingBar from 'react-top-loading-bar';
+import {apiURL} from '../config';
 const Container=styled.div`
     width: 100vw;
     height: 100vh;
@@ -23,7 +24,6 @@ const Img=styled.img`
     object-fit: cover;
     z-index: -1;
 `;
-
 const Box=styled.div`
     background-color: white;
     width: 350px;
@@ -34,24 +34,12 @@ const Box=styled.div`
     padding: 50px;
     border-radius: 20px;
     gap: 20px;
-    ;
 `;
-
 const Head=styled.div`
     font-size: 22px;
     font-weight: bold;
     font-family: Arial, Helvetica, sans-serif;
 `;
-
-const Form=styled.form`
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-`;
-
 const Input=styled.input`
     width: 100%;
     height: 40px;
@@ -61,7 +49,6 @@ const Input=styled.input`
     border-bottom: 1px solid grey;
     font-size: 20px;
 `;
-
 const Submit=styled.button`
     width: 100%;
     padding: 15px;
@@ -75,7 +62,6 @@ const Submit=styled.button`
     }
 
 `;
-
 const Create=styled.div`
     width: 100%;
 `;
@@ -85,7 +71,6 @@ const Linkitem=styled(Link)`
         color: red;
     }
 `;
-
 const Error=styled.div`
     width: 100%;
     display: flex;
@@ -94,22 +79,22 @@ const Error=styled.div`
     color: red;
     font-size: 20px;
 `;
-
 export default function Login() {
     const {setLoginState}=useContext(LoginContext);
-    const loginURL="http://localhost:5000/api/auth/login";
-    const getuserURL="http://localhost:5000/api/auth/getuser";
+    const loginURL=`${apiURL}/api/auth/login`;
+    const getuserURL=`${apiURL}/api/auth/getuser`;
     const [email,setEmail]=useState("");
     const [pass,setPass]=useState("");
     const [authtoken,setAuthtoken]=useState(null);
     const [error,setError]=useState(null);
     const navigate = useNavigate();
-
+    const [progress,updateProgress]=useState(0);
     useEffect(()=>{
         localStorage.removeItem('user')
     },[])
     
     const login=async(e)=>{
+        // fetching the login credentials and validating it
         const requestOptions = {
             method: 'POST',
             headers: {
@@ -117,28 +102,33 @@ export default function Login() {
             },
             body:  JSON.stringify({email:email,password:pass}),           
             };
-        try {
-            fetch(loginURL,requestOptions).then((response) => {
-                if (!response.ok) {
-                    // console.log("error n==bencho")
-                  throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-                return response.json(); // Parse the response as JSON
-              })
+            try {
+                fetch(loginURL,requestOptions).then((response) => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! Status: ${response.status}`);
+                    }
+                    return response.json(); // Parse the response as JSON
+                })
               .then((responseData) => {
                     setAuthtoken(responseData.authtoken);
                     if(responseData.error)
-                        setError(responseData.error)
-              })
-              .catch((error) => {
+                    setError(responseData.error)
+            })
+            .catch((error) => {
                 // Handle any errors that occur during the request
-                    setError("Internal Server Error");
-              });
+                setError("Internal Server Error");
+            });   
+            
         } catch (error) {
             console.log(error)
         }
+        if(authtoken)
+            updateProgress(60);
+        else
+            updateProgress(100);
     }
     useEffect(()=>{
+        // to showcase the error for 2 sec in case of wrong credentials
         if(error){
             setInterval(()=>{
                 setError(null);
@@ -146,10 +136,9 @@ export default function Login() {
         }
     },[error])
     useEffect(()=>{
-            
+        
         const getUser=async()=>{
             if(authtoken){
-                    const body={authtoken:authtoken};
                     const headers={
                         'Content-Type': 'application/json',
                           'auth-token':authtoken
@@ -172,6 +161,7 @@ export default function Login() {
                                 email:response.data.email,
                                 _id:response.data._id
                             }))
+                            updateProgress(100);
                             navigate("/")
                         }
                     } catch (error) {
@@ -180,22 +170,33 @@ export default function Login() {
                 }
                 
             }
+
+            // fetching the user details from the authtoken
             getUser();
-        },[authtoken])
-    
+        },[authtoken,navigate,setLoginState,getuserURL])
+
+        
   return (
-    <Container>
-            <Img src="./static/background.jpg"/>
-            <Box>
-                <Head>Login</Head>
-                    <Input type='email' required placeholder='Email' onChange={(e)=>setEmail(e.target.value)}/>
-                    <Input type='password' required placeholder='Password'  onChange={(e)=>setPass(e.target.value)}/>
-                    <Submit onClick={login}>Login</Submit>
-                <Create>
-                    <Linkitem to="/signup">Create Account</Linkitem>
-                </Create>
-                <Error>{error}</Error>
-            </Box>
-    </Container>
+      <>
+      <LoadingBar
+        color='#f11946'
+        progress={progress}
+      />
+        <Container>
+                    <Img src="./static/background.jpg"/>
+                    <Box>
+                        <Head>Login</Head>
+                            <Input type='email' required placeholder='Email' onChange={(e)=>setEmail(e.target.value)}/>
+                            <Input type='password' required placeholder='Password'  onChange={(e)=>setPass(e.target.value)}/>
+                            <Submit onClick={()=>{
+                                updateProgress(30);
+                                login();}}>Login</Submit>
+                        <Create>
+                            <Linkitem to="/signup">Create Account</Linkitem>
+                        </Create>
+                        <Error>{error}</Error>
+                    </Box>
+                    </Container>
+    </>
   );
 }

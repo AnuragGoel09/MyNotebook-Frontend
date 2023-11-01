@@ -1,16 +1,15 @@
 import React, { useContext, useState } from "react";
 import NotebookContext from './notebookContext'
 import LoginContext from "../login/loginContext";
-
+import {apiURL} from '../../config';
 const NotebookState=(props)=>{
-  const host = "http://localhost:5000"
   const notesbooks = []
   const [notebooks, setNotebooks] = useState(notesbooks)
-  const {loginState,setLoginState}=useContext(LoginContext);
+  const {loginState}=useContext(LoginContext);
   // Get all Notebooks
   const getNotebooks = async () => {
     // API Call 
-    const response = await fetch(`${host}/api/notebooks/fetchallnotebooks`, {
+    const response = await fetch(`${apiURL}/api/notebooks/fetchallnotebooks`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -25,7 +24,7 @@ const NotebookState=(props)=>{
   const addNotebook = async () => {
     // TODO: API Call
     // API Call 
-    const response = await fetch(`${host}/api/notebooks/addnotebook`, {
+    const response = await fetch(`${apiURL}/api/notebooks/addnotebook`, {
       method: 'POST',
       headers: {
         "auth-token":loginState.authtoken
@@ -39,13 +38,14 @@ const NotebookState=(props)=>{
   // Delete a Note
   const deleteNotebook = async (id) => {
     // API Call
-    const response = await fetch(`${host}/api/notebooks/deletenotebook/${id}`, {
+    const response = await fetch(`${apiURL}/api/notebooks/deletenotebook/${id}`, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
         "auth-token": loginState.authtoken
       }
     });
+    
     const json = response.json(); 
     const newNotebooks = notebooks.filter((notebook) => { return notebook._id !== id })
     setNotebooks(newNotebooks)
@@ -54,27 +54,32 @@ const NotebookState=(props)=>{
   // Edit a Notebook
   const editNotebook = async (id, title,image) => {
     // API Call 
-    const response = await fetch(`${host}/api/notebooks/updatenotebook/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        "auth-token": loginState.authtoken
-      },
-      body: JSON.stringify({title, image})
-    });
-    const json = await response.json(); 
-
-     let newNotebooks = JSON.parse(JSON.stringify(notebooks))
-    // Logic to edit in client
-    for (let index = 0; index < newNotebooks.length; index++) {
-      const element = newNotebooks[index];
-      if (element._id === id) {
-        newNotebooks[index].title = title;
-        newNotebooks[index].image = image;
-        break; 
-      }
-    }  
-    setNotebooks(newNotebooks);
+    try {
+      
+      const response = await fetch(`${apiURL}/api/notebooks/updatenotebook/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          "auth-token": loginState.authtoken
+        },
+        body: JSON.stringify({title, image})
+      });
+      const json = await response.json(); 
+  
+       let newNotebooks = JSON.parse(JSON.stringify(notebooks))
+      // Logic to edit in client
+      for (let index = 0; index < newNotebooks.length; index++) {
+        const element = newNotebooks[index];
+        if (element._id === id) {
+          newNotebooks[index].title = title;
+          newNotebooks[index].image = image;
+          break; 
+        }
+      }  
+      setNotebooks(newNotebooks);
+    } catch (error) {
+      
+    }
   }
 
     return (

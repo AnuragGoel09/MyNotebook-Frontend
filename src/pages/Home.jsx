@@ -1,13 +1,13 @@
-import React,{useContext, useEffect} from 'react';
+import React,{useContext, useEffect, useState} from 'react';
 import styled from 'styled-components'
-import Notebook_Link from '../components/Notebook_Link';
+import NotebookLink from '../components/NotebookLink';
 import AddIcon from '@mui/icons-material/Add';
-import { Link, Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import NotebookContext from '../context/notebooks/notebookContext';
 import LoginContext from '../context/login/loginContext';
-import Cookies from 'js-cookie';
-
+import {motion} from 'framer-motion';
+import LoadingBar from 'react-top-loading-bar'
 
 const Container=styled.div`
     width: 100vw;
@@ -26,7 +26,7 @@ const Head=styled.span`
     font-family: Verdana, Geneva, Tahoma, sans-serif;
 `;
 
-const AddNotebook=styled.div`
+const AddNotebook=styled(motion.div)`
     position: absolute;
     right: 40px;
     display: flex;
@@ -39,7 +39,7 @@ const AddNotebook=styled.div`
     cursor: pointer;
 `;
 
-const Wrapper=styled.div`
+const Wrapper=styled(motion.div)`
     box-sizing: border-box;
     padding: 60px 50px;
     display: flex;
@@ -47,30 +47,49 @@ const Wrapper=styled.div`
     flex-wrap: wrap;
 `;
 
-const Links=styled(Link)`
-    text-decoration: none;
-`;
 export default function Home() {
     const {loginState}=useContext(LoginContext);
-    const {notebooks,addNotebook,editNotebook,deleteNotebook,getNotebooks}=useContext(NotebookContext);
+    const {notebooks,addNotebook,getNotebooks}=useContext(NotebookContext);
+    const [isZoomed, setIsZoomed] = useState(false);
+    const [progress,updateProgress]=useState(0);
     useEffect(()=>{
-        if(loginState)
+        if(loginState){
+            updateProgress(50);
             getNotebooks();
-    },[])
+            updateProgress(100);
+        }
+    },[loginState])
   return (
     <>{loginState===null && <Navigate to="/login"/>}
         <Navbar/>
-        <Container>
+        <LoadingBar
+            color='#f11946'
+            progress={progress}
+            onLoaderFinished={()=>updateProgress(0)}
+        />
+       <Container>
             <Head>
                 Notebooks
-                <AddNotebook onClick={()=>{
-                addNotebook();
-                }}><AddIcon/> Notebook</AddNotebook>
+                <AddNotebook
+                    whileTap={{ scale: 0.9 }}
+                    initial={{ scale: 1 }}
+                    animate={{ scale: isZoomed ? 1.5 : 1 }}
+                    transition={{ duration: 0.5 }}    
+                    onClick={()=>{
+                        setIsZoomed(true);
+                        updateProgress(30);
+                        setTimeout(()=>{
+                            addNotebook();
+                            setIsZoomed(false);
+                            updateProgress(100);
+                        },500);
+                        
+                    }}><AddIcon/> Notebook</AddNotebook>
             </Head>
-            <Wrapper>
-                {
+            <Wrapper initial={{y:'-100vh'}} animate={{y:0}} transition={{type:"spring",duration:1.5}}>
+                {  
                     notebooks.map((notebook)=>(
-                        <Notebook_Link notebook={notebook}/>
+                        <NotebookLink key={notebook._id} notebook={notebook}/>
                     ))
                 }
             </Wrapper>

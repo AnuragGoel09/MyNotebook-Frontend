@@ -9,10 +9,12 @@ const Container=styled.div`
     height: 210px;
     box-sizing: border-box;
     padding: 10px;
-    background-color: lightblue;
+    background-color: ${props=>props.bgcolor};
+    color: ${props=>props.fcolor};
     &:hover{
         box-shadow: 0.5px 0.5px 4px #888888;
     }
+    border-radius: 20px;
 `;
 
 const Title=styled.div`
@@ -35,7 +37,8 @@ const Time=styled.div`
     position: absolute;
     left: 5px;
     bottom: 5px;
-    opacity: 0.7;
+    padding: 5px;
+    opacity: 0.8;
     font-size: 12px;
 `;
 
@@ -50,7 +53,7 @@ const Item=styled.div`
 export default function Note_Link(props) {
     const checklist=props.checklist;
   return (
-    <Container>
+    <Container bgcolor={checklist.bgcolor} fcolor={checklist.fontcolor}>
         <Title>{checklist.title}</Title>
         <TextArea>
             
@@ -73,7 +76,7 @@ export default function Note_Link(props) {
                 }
            
         </TextArea>
-        <Time>{checklist.date}</Time>
+        <Time>{(new Date(checklist.date)).toISOString().split('T')[0]}</Time>
     </Container>
   );
 }

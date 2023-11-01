@@ -3,7 +3,8 @@ import { Link,useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import LoginContext from '../context/login/loginContext';
 import axios from 'axios'
-
+import LoadingBar from 'react-top-loading-bar'
+import {apiURL} from '../config';
 const Container=styled.div`
     width: 100vw;
     height: 100vh;
@@ -23,7 +24,6 @@ const Img=styled.img`
     object-fit: cover;
     z-index: -1;
 `;
-
 const Box=styled.div`
     background-color: white;
     width: 350px;
@@ -34,24 +34,12 @@ const Box=styled.div`
     padding: 50px;
     border-radius: 20px;
     gap: 20px;
-    ;
 `;
-
 const Head=styled.div`
     font-size: 22px;
     font-weight: bold;
     font-family: Arial, Helvetica, sans-serif;
 `;
-
-const Form=styled.form`
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 20px;
-`;
-
 const Input=styled.input`
     width: 100%;
     height: 40px;
@@ -61,7 +49,6 @@ const Input=styled.input`
     border-bottom: 1px solid grey;
     font-size: 20px;
 `;
-
 const Submit=styled.button`
     width: 100%;
     padding: 15px;
@@ -73,9 +60,7 @@ const Submit=styled.button`
     &:hover{
         background-color: cyan;
     }
-
 `;
-
 const Create=styled.div`
     width: 100%;
 `;
@@ -94,22 +79,24 @@ const Error=styled.div`
     font-size: 20px;
 `;
 
-
 export default function SignUp() {
     const {setLoginState}=useContext(LoginContext);
-    const signupURL="http://localhost:5000/api/auth/createuser";
-    const getuserURL="http://localhost:5000/api/auth/getuser";
+    const signupURL=`${apiURL}/api/auth/createuser`;
+    const getuserURL=`${apiURL}/api/auth/getuser`;
     const [name,setName]=useState("");
     const [email,setEmail]=useState("");
     const [pass,setPass]=useState("");
     const [authtoken,setAuthtoken]=useState(null);
     const [error,setError]=useState(null);
-
+    const [progress,updateProgress]=useState(0);
     const navigate = useNavigate()
+    updateProgress(0);
     useEffect(()=>{
         localStorage.removeItem('user')
     },[])
+    
     const signup=async()=>{
+        updateProgress(30);
         const requestOptions = {
             method: 'POST',
             headers: {
@@ -118,7 +105,6 @@ export default function SignUp() {
             },
             body:  JSON.stringify({name:name,email:email,password:pass}),           };
         
-        // const body={email:email,password:pass};
         try {
             fetch(signupURL,requestOptions).then((response) => {
                 if (!response.ok) {
@@ -130,7 +116,6 @@ export default function SignUp() {
                     setAuthtoken(responseData.authtoken);
                     if(responseData.error)
                         setError(responseData.error)
-                    // console.log(responseData)
               })
               .catch((error) => {
                 // Handle any errors that occur during the request
@@ -139,6 +124,10 @@ export default function SignUp() {
         } catch (error) {
             setError("Internal Server Error");
         }
+        if(authtoken)
+            updateProgress(60);
+        else
+            updateProgress(100);
     };
     useEffect(()=>{
         if(error){
@@ -151,7 +140,6 @@ export default function SignUp() {
             
         const getUser=async()=>{
             if(authtoken){
-                    const body={authtoken:authtoken};
                     const headers={
                         'Content-Type': 'application/json',
                           'auth-token':authtoken
@@ -174,6 +162,7 @@ export default function SignUp() {
                                 email:response.data.email,
                                 _id:response.data._id
                             }))
+                            updateProgress(100);
                             navigate("/")
                         }
                     } catch (error) {
@@ -183,10 +172,15 @@ export default function SignUp() {
                 
             }
             getUser();
-        },[authtoken])
+        },[authtoken,navigate,setLoginState,getuserURL])
 
   return (
-    <Container>
+    <>
+    <LoadingBar
+        color='#f11946'
+        progress={progress}
+      />
+        <Container>
             <Img src="./static/background.jpg"/>
             <Box>
                 <Head>Signup</Head>
@@ -199,6 +193,7 @@ export default function SignUp() {
                 </Create>
                 <Error>{error}</Error>
             </Box>
-    </Container>
+        </Container>
+    </>
   );
 }

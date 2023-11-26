@@ -18,7 +18,6 @@ const NoteState=(props)=>{
     });
     const json = await response.json();
     setNotes(json)
-    // setShow(true);
   }
 
   // Add a Note
@@ -57,7 +56,6 @@ const NoteState=(props)=>{
   const editNote = async (id, title, desc,bgcolor,fontcolor) => {
     // API Call 
     try {
-      
       const response = await fetch(`${apiURL}/api/notes/updatenote/${id}`, {
         method: 'PUT',
         headers: {
@@ -67,7 +65,9 @@ const NoteState=(props)=>{
         body: JSON.stringify({title, desc,bgcolor,fontcolor})
       });
       const json = await response.json(); 
+      console.log("hello");
       if(json.error){
+        console.log(json.error);
         return;
       }
       let newNotes = JSON.parse(JSON.stringify(notes))

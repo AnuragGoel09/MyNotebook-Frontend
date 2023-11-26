@@ -56,6 +56,7 @@ gap: 5px;
 
 const Logout=styled(Link)`
   cursor: pointer;
+  color:black;
   text-decoration: none;
   padding: 8px;
   border-radius: 10px;

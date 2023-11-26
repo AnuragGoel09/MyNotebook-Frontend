@@ -15,6 +15,7 @@ import NotebookContext from '../context/notebooks/notebookContext';
 import Navbar from '../components/Navbar';
 import DeleteIcon from '@mui/icons-material/Delete';
 import LoadingBar from 'react-top-loading-bar';
+import { mobile } from '../responsive';
 const Container=styled.div`
     width: 100vw;
     box-sizing: border-box;
@@ -58,6 +59,7 @@ const Wrapper=styled.div`
     display: flex;
     gap: 80px;
     flex-wrap: wrap;
+    ${mobile({justifyContent:'center'})}
 `;
 
 const Button=styled.div`

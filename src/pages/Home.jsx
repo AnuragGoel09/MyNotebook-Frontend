@@ -8,6 +8,7 @@ import NotebookContext from '../context/notebooks/notebookContext';
 import LoginContext from '../context/login/loginContext';
 import {motion} from 'framer-motion';
 import LoadingBar from 'react-top-loading-bar'
+import {mobile} from '../responsive';
 
 const Container=styled.div`
     width: 100vw;
@@ -37,15 +38,36 @@ const AddNotebook=styled(motion.div)`
         background-color: rgba(0,0,0,0.05);
     };
     cursor: pointer;
+    ${mobile({display:'none'})} 
 `;
 
-const Wrapper=styled(motion.div)`
+const Wrapper=styled.div`
     box-sizing: border-box;
+    position: relative;
     padding: 60px 50px;
     display: flex;
     gap: 120px;
     flex-wrap: wrap;
+    ${mobile({justifyContent:'center'})} 
 `;
+
+const MobileAdd=styled(motion.div)`
+    position: fixed;
+    top: 25%;
+    left: 0%;
+    width: 60px;
+    height: 50px;
+    border-radius: 0px 30px 30px 0px;
+    background-color: black;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    box-sizing: border-box;
+    padding-right: 5px;
+    display: none;
+    color: white;
+    ${mobile({display:'flex'})} 
+    `;
 
 export default function Home() {
     const {loginState}=useContext(LoginContext);
@@ -86,7 +108,23 @@ export default function Home() {
                         
                     }}><AddIcon/> Notebook</AddNotebook>
             </Head>
-            <Wrapper initial={{y:'-100vh'}} animate={{y:0}} transition={{type:"spring",duration:1.5}}>
+            <Wrapper>
+                <MobileAdd whileTap={{ scale: 0.9 }}
+                    initial={{ scale: 1 }}
+                    animate={{ scale: isZoomed ? 1.5 : 1 }}
+                    transition={{ duration: 0.5 }}    
+                    onClick={()=>{
+                        setIsZoomed(true);
+                        updateProgress(30);
+                        setTimeout(()=>{
+                            addNotebook();
+                            setIsZoomed(false);
+                            updateProgress(100);
+                        },500);
+                        
+                    }}>
+                    <AddIcon style={{fontSize:'40px'}}/>
+                </MobileAdd>
                 {  
                     notebooks.map((notebook)=>(
                         <NotebookLink key={notebook._id} notebook={notebook}/>

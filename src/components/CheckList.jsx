@@ -7,6 +7,7 @@ import ChecklistContext from '../context/checklists/checklistContext';
 import { ColorPicker, useColor } from "react-color-palette";
 import "react-color-palette/css";
 import BrushIcon from '@mui/icons-material/Brush';
+import { mobile } from '../responsive';
 const Container=styled.div`
     width: 60vw;
     height: 90vh;
@@ -17,6 +18,7 @@ const Container=styled.div`
     justify-content: center;
     align-items: center;
     border-radius: 30px;
+    ${mobile({width:'100%',height:'70vh'})}
 `;
 
 const Title=styled.input`
@@ -129,6 +131,7 @@ const Color=styled.div`
 const Box=styled.div`
     display: flex;
     gap: 20px;
+    ${mobile({flexDirection:'column'})};
 `;
 
 const Head=styled.div`

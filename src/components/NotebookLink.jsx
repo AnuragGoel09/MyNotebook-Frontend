@@ -19,7 +19,7 @@ const Container=styled.div`
   
 `;
 
-const Img=styled(motion.img)`
+const Img=styled.img`
   width: 150px;
   height: 200px;
   object-fit: cover;
@@ -90,10 +90,7 @@ export default function Notebook_Link(props) {
   return (
     <Container>
         <Img onClick={()=>{
-                isClicked ? zoomOut() : zoomIn()
-                setTimeout(()=>{
-                  navigate(`/${props.notebook._id}`)
-                },600);
+                  navigate(`/${props.notebook._id}`);
                 }}
             src={props.notebook.image}
             initial={{ y: 0 }}

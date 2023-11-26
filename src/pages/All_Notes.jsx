@@ -13,6 +13,7 @@ import NoteContext from '../context/notes/noteContext';
 import ChecklistContext from '../context/checklists/checklistContext';
 import LoadingBar from 'react-top-loading-bar';
 import {apiURL} from '../config';
+import { mobile } from '../responsive';
 const Container=styled.div`
     width: 100vw;
     box-sizing: border-box;
@@ -34,6 +35,7 @@ const Wrapper=styled.div`
     display: flex;
     gap: 80px;
     flex-wrap: wrap;
+    ${mobile({justifyContent:'center'})}
 `;
 
 const Box=styled.div`

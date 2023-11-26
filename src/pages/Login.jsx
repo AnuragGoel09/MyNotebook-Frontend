@@ -5,7 +5,7 @@ import LoginContext from '../context/login/loginContext';
 import axios from 'axios';
 import LoadingBar from 'react-top-loading-bar';
 import {apiURL} from '../config';
-import { mobile} from '../responsive';
+import {mobile} from '../responsive';
 const Container=styled.div`
     width: 100vw;
     height: 100vh;
@@ -190,6 +190,7 @@ export default function Login() {
         <Container>
                     <Img src="./static/background.jpg"/>
                     <Box>
+                        <Head>MY NOTEBOOK</Head>
                         <Head>Login</Head>
                             <Input type='email' required placeholder='Email' onChange={(e)=>setEmail(e.target.value)}/>
                             <Input type='password' required placeholder='Password'  onChange={(e)=>setPass(e.target.value)}/>

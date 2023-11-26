@@ -189,6 +189,7 @@ export default function SignUp() {
         <Container>
             <Img src="./static/background.jpg"/>
             <Box>
+            <Head>MY NOTEBOOK</Head>
                 <Head>Signup</Head>
                     <Input type='text' required placeholder='Name' onChange={(e)=>setName(e.target.value)}/>
                     <Input type='email' required placeholder='Email' onChange={(e)=>setEmail(e.target.value)}/>

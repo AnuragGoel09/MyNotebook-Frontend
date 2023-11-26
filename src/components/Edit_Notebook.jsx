@@ -2,6 +2,7 @@ import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import DoneOutlinedIcon from '@mui/icons-material/DoneOutlined';
 import NotebookContext from '../context/notebooks/notebookContext';
+import { mobile } from '../responsive';
 const Container=styled.div`
     width: 60vw;
     height: 70vh;
@@ -12,6 +13,8 @@ const Container=styled.div`
     flex-direction: column;
     align-items: center;
     box-sizing: border-box;
+    ${mobile({width:'90vw',padding:'30px',justifyContent:'center',overflow:'scroll'})};
+
 `;
 
 const Head=styled.div`
@@ -29,6 +32,7 @@ const Box=styled.div`
     box-sizing: border-box;
     padding: 20px;
     display: flex;
+    ${mobile({flexDirection:'column'})} 
 `;
 
 const Notebook=styled.div`
@@ -52,6 +56,7 @@ const Notebook_Title=styled.div`
 const Details=styled.div`
     flex: 1;
     width: 60%;
+    ${mobile({width:'100%'})} 
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -85,6 +90,7 @@ const Text2=styled.div`
 const Options=styled.div`
 display: flex;
 margin: 5px;
+${mobile({justifyContent:'center'})} 
 flex-wrap: wrap;
 gap: 30px;
 `;

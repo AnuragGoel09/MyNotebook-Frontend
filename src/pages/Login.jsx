@@ -9,12 +9,12 @@ import {mobile} from '../responsive';
 const Container=styled.div`
     width: 100vw;
     height: 100vh;
-  box-sizing: border-box;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 10px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    box-sizing: border-box;
 `;
 const Img=styled.img`
     position: absolute;

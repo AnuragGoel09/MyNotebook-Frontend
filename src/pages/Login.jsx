@@ -3,7 +3,7 @@ import { Link ,useNavigate} from 'react-router-dom';
 import styled from 'styled-components';
 import LoginContext from '../context/login/loginContext';
 import axios from 'axios';
-import LoadingBar from 'react-top-loading-bar';
+import Loader from '../components/Loader'
 import {apiURL} from '../config';
 import {mobile} from '../responsive';
 const Container=styled.div`
@@ -11,10 +11,24 @@ const Container=styled.div`
     height: 100vh;
     position: relative;
     display: flex;
+    flex-direction: column;
+    gap: 30px;
     justify-content: center;
     align-items: center;
-    padding: 10px;
-    box-sizing: border-box;
+`;
+const Title=styled.div`
+    position: absolute;
+    width: 100%;
+    left: 50px;
+    top: 50px;
+    text-align: left;
+    justify-content: left;
+    font-size: 30px;
+    font-weight: bold;
+    display: flex;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    color: #5356FF;
+    z-index: 99;
 `;
 const Img=styled.img`
     position: absolute;
@@ -26,53 +40,67 @@ const Img=styled.img`
     z-index: -1;
 `;
 const Box=styled.div`
-    background-color: white;
-    width: 350px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 50px;
-    border-radius: 20px;
-    gap: 20px; 
-    ${mobile({gap:'10px',width:'100%'})} 
+    font-size: 16px;
+    width: 80%;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 1em;
+    background-color: #5356FF;
+    border-radius: 25px;
 `;
 const Head=styled.div`
     font-size: 22px;
     font-weight: bold;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    padding: 10px;
+    color: white;
+    margin-bottom: 25px;
 `;
 const Input=styled.input`
     width: 100%;
-    height: 40px;
-    border: none;
+    border-radius: 20px;
+    background-color: #E1F7F5;
     outline: none;
-    padding: 5px;
-    border-bottom: 1px solid grey;
-    font-size: 20px;
-    ${mobile({fontSize:'16px'})}
+    border: none;
+    padding: 1em;
+    color:#5356FF;
+    margin-bottom:2em;
+    box-sizing: border-box;
+    margin-bottom: 30px;
+    transition: all 0.3s ease;
+    font-size: 16px;
+    &:hover{
+        transform: scale(1.05);
+    };
 `;
 const Submit=styled.button`
     width: 100%;
-    padding: 15px;
-    font-size: 20px;
-    border-radius: 10px;
-    border: 1px solid darkblue;
     cursor: pointer;
-    background-color: lightblue;
+    border-radius: 20px;
+    background-color: #E1F7F5;
+    outline: none;
+    border: none;
+    padding: 1em;
+    color:#5356FF;
+    margin-bottom:2em;
+    box-sizing: border-box;
+    margin-bottom: 30px;
+    transition: all 0.3s ease;
+    font-size: 16px;
     &:hover{
-        background-color: cyan;
-    }
-    ${mobile({fontSize:'16px'})}
-
+        transform: scale(1.05);
+    };
 `;
 const Create=styled.div`
     width: 100%;
 `;
 const Linkitem=styled(Link)`
     text-decoration: none;
+    padding: 10px;
+    color: white;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     &:hover{
-        color: red;
+        font-weight: bold;
     }
 `;
 const Error=styled.div`
@@ -80,7 +108,7 @@ const Error=styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    color: red;
+    color: whitesmoke;
     font-size: 20px;
 `;
 export default function Login() {
@@ -92,7 +120,7 @@ export default function Login() {
     const [authtoken,setAuthtoken]=useState(null);
     const [error,setError]=useState(null);
     const navigate = useNavigate();
-    const [progress,updateProgress]=useState(0);
+    const [progress,updateProgress]=useState(false);
     useEffect(()=>{
         setLoginState(null);
         localStorage.removeItem('user')
@@ -117,20 +145,18 @@ export default function Login() {
               .then((responseData) => {
                     setAuthtoken(responseData.authtoken);
                     if(responseData.error)
+                    updateProgress(false);
                     setError(responseData.error)
             })
             .catch((error) => {
-                // Handle any errors that occur during the request
+                updateProgress(false);
                 setError("Internal Server Error");
             });   
             
         } catch (error) {
+            updateProgress(false)
             console.log(error)
         }
-        if(authtoken)
-            updateProgress(60);
-        else
-            updateProgress(100);
     }
     useEffect(()=>{
         // to showcase the error for 2 sec in case of wrong credentials
@@ -166,7 +192,6 @@ export default function Login() {
                                 email:response.data.email,
                                 _id:response.data._id
                             }))
-                            updateProgress(100);
                             navigate("/")
                         }
                     } catch (error) {
@@ -183,26 +208,25 @@ export default function Login() {
         
   return (
       <>
-      <LoadingBar
-        color='#f11946'
-        progress={progress}
-      />
-        <Container>
-                    <Img src="./static/background.jpg"/>
+        {progress && 
+                <Loader/>}
+        {!progress && <Container>
+                    <Title>My Notebook</Title>
+                    {/* <Img src="./static/background.jpg"/> */}
                     <Box>
-                        <Head>MY NOTEBOOK</Head>
+                        {/* <Head>MY NOTEBOOK</Head> */}
                         <Head>Login</Head>
                             <Input type='email' required placeholder='Email' onChange={(e)=>setEmail(e.target.value)}/>
                             <Input type='password' required placeholder='Password'  onChange={(e)=>setPass(e.target.value)}/>
                             <Submit onClick={()=>{
-                                updateProgress(30);
+                                updateProgress(true);
                                 login();}}>Login</Submit>
                         <Create>
                             <Linkitem to="/signup">Create Account</Linkitem>
                         </Create>
                         <Error>{error}</Error>
                     </Box>
-                    </Container>
+                    </Container>}
     </>
   );
 }

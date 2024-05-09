@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import styled from 'styled-components';
 import DoneOutlinedIcon from '@mui/icons-material/DoneOutlined';
 import NotebookContext from '../context/notebooks/notebookContext';
-import { mobile } from '../responsive';
+import { mobile ,tablet} from '../responsive';
 const Container=styled.div`
     width: 60vw;
     height: 70vh;
@@ -13,7 +13,7 @@ const Container=styled.div`
     flex-direction: column;
     align-items: center;
     box-sizing: border-box;
-    ${mobile({width:'90vw',padding:'30px',justifyContent:'center',overflow:'scroll'})};
+    ${tablet({width:'90vw',padding:'30px',justifyContent:'center',overflow:'scroll'})};
 
 `;
 
@@ -46,11 +46,15 @@ const Notebook=styled.div`
 const Notebook_Img=styled.div`
     width: 250px;
     height: 320px;
+    ${tablet({width:'100px',height:'125px'})} 
+    /* width: 60%;
+    height: 100%; */
 `;
 
 const Notebook_Title=styled.div`
     margin: 10px;
     font-size: 20px;
+    ${tablet({fontSize:'16px'})} 
 `;
 
 const Details=styled.div`
@@ -114,6 +118,7 @@ const SaveButton=styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+    ${mobile({marginTop:'30px'})}
     cursor: pointer;
     &:hover{
         background-color: rgba(0,0,0,0.1);

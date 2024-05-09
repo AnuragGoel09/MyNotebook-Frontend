@@ -56,21 +56,20 @@ const Wrapper=styled.div`
 `;
 
 const MobileAdd=styled(motion.div)`
-    position: fixed;
-    top: 25%;
-    left: 0%;
-    width: 60px;
-    height: 50px;
-    border-radius: 0px 30px 30px 0px;
-    background-color: black;
+    position: absolute;
+    right: 10px;
     display: flex;
-    justify-content: end;
     align-items: center;
-    box-sizing: border-box;
-    padding-right: 5px;
+    font-size: 17px;
+    padding: 5px 10px;
+    border-radius: 10px;
+    cursor: pointer; 
+    transition: all 0.2s ease;
+    &:hover{
+        transform: scale(1.1);
+    }
     display: none;
-    color: white;
-    ${mobile({display:'flex'})} 
+    ${mobile({display:'flex'})};
     `;
 
 export default function Home() {
@@ -97,6 +96,10 @@ export default function Home() {
        <Container>
             <Head>
                 My Notebooks
+                <MobileAdd onClick={()=>{
+                    addNotebook();
+                    setAddProgress(true);
+                }}>{addProgress==false?<><AddIcon/></>:<BounceLoader size="30" color="black"/>}</MobileAdd>
                 <AddNotebook onClick={()=>{
                     addNotebook();
                     setAddProgress(true);

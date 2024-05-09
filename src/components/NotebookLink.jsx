@@ -105,7 +105,6 @@ export default function Notebook_Link(props) {
                   setTimeout(()=>{
                   },200);
                   deleteNB();
-
                 }
               }
               ><DeleteIcon  style={{color:'white'}}/></Delete> 

@@ -16,6 +16,8 @@ import Navbar from '../components/Navbar';
 import DeleteIcon from '@mui/icons-material/Delete';
 import LoadingBar from 'react-top-loading-bar';
 import { mobile } from '../responsive';
+import Loader from '../components/Loader';
+import BounceLoader from "react-spinners/BounceLoader";
 const Container=styled.div`
     width: 100vw;
     box-sizing: border-box;
@@ -37,6 +39,7 @@ const Add=styled.div`
     position: absolute;
     right: 40px;
     display: flex;
+    margin-top: 15px;
     gap: 10px;
     align-items: center;
 `;
@@ -94,6 +97,19 @@ const Delete=styled.div`
 
 `;
 
+const Load=styled.div`
+    display: flex;
+    /* gap: 3px; */
+    align-items: center;
+    justify-content: center;
+    /* font-size: 15px; */
+    /* padding: 5px; */
+    /* &:hover{
+        background-color: rgba(0,0,0,0.05);
+    };
+    cursor: pointer; */
+`;
+
 export default function Notebook() {
     const [show,setShow]=useState(false);
     const {notes, addNote, deleteNote, getNotes }=useContext(NoteContext);
@@ -102,45 +118,55 @@ export default function Notebook() {
     const location=useLocation();
     const notebookId=location.pathname.substring(1, location.pathname.length);
     const [currNotebook,setCurrNotebook]=useState(null);
-    const [progress,updateProgress]=useState(0);
+    const [progress,updateProgress]=useState(true);
+    const [addNoteProgress,setAddNote]=useState(false);
+    const [addListProgress,setAddList]=useState(false);
     useEffect(()=>{
         getNotes(notebookId);
-        updateProgress(30);
         getLists(notebookId);
-        updateProgress(100);
         for(let i=0;i<notebooks.length;i++){
             if(notebooks._id===notebookId){
                 setCurrNotebook(notebooks[i]);
                 break;
             }
         }
+        updateProgress(false);
     },[]);
     useEffect(()=>{
-        if(progress===100){
+        if(progress===false){
             setShow(true);
         }
     },[progress])
+    useEffect(()=>{
+        setAddNote(false)
+    },[notes])
+    useEffect(()=>{
+        setAddList(false)
+    },[lists])
     return (
         <>
-         <LoadingBar
-            color='#f11946'
-            progress={progress}
-            onLoaderFinished={()=>updateProgress(0)}
-        />
         <Navbar/>
+        {progress && <Loader/>}
+        {!progress &&
+        <>
     <Container>
          <Head>
             {currNotebook && currNotebook.title}
             <Add>
+                {
+                    addNoteProgress==true?<Load><BounceLoader size="20" color="black"/></Load>:
                 <Write onClick={()=>{
-                    updateProgress(30);
+                    setAddNote(true)
                     addNote(notebookId)
-                    updateProgress(100);}
-                    }><EditNoteIcon/> Write</Write>
-                <Write onClick={()=>{
-                    updateProgress(30);
-                    addList(notebookId)
-                    updateProgress(100);}}><ChecklistRtlIcon/> To-Do</Write>
+                }}><EditNoteIcon/> Write</Write>
+            }
+            {
+                    addListProgress==true?<Load><BounceLoader size="20" color="black"/></Load>:
+                    <Write onClick={()=>{
+                        setAddList(true)
+                        addList(notebookId)
+                        }}><ChecklistRtlIcon/> To-Do</Write>
+            }
             </Add>
         </Head>
         {
@@ -181,6 +207,8 @@ export default function Notebook() {
         }
       
     </Container>
+    </>
+    }
     </>
   );
 }

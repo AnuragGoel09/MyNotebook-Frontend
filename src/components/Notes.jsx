@@ -34,6 +34,12 @@ const Title=styled.input`
     margin-bottom: 5px;
 `;
 
+const Line=styled.div`
+    width: 100%;
+    height: 5px;
+    background-color: black;
+`;
+
 const TextArea=styled.textarea`
     width: 100%;
     height: 100%;
@@ -95,7 +101,7 @@ const Color=styled.div`
 const Box=styled.div`
     display: flex;
     gap: 20px;
-    ${mobile({flexDirection:'column'})}
+    ${mobile({flexDirection:'column',overflow:'scroll'})}
 `;
 
 const Head=styled.div`
@@ -131,6 +137,7 @@ export default function Notes(props) {
     const [fcolor,setFcolor]=useColor(note.fontcolor);
     const [currbgcolor,setcurrBgcolor]=useState(note.bgcolor);
     const [currfcolor,setcurrFcolor]=useState(note.fontcolor);
+   
     const changeTitle=(e)=>{
         setTitle(e.target.value);
     }
@@ -145,6 +152,7 @@ export default function Notes(props) {
     <>
     <Container bgcolor={currbgcolor}>
         <Title value={title} onChange={changeTitle} fcolor={currfcolor}/>
+        <Line></Line>
         <TextArea fcolor={currfcolor} onChange={changeDesc} value={desc}>
         </TextArea>
         <ChooseColor>

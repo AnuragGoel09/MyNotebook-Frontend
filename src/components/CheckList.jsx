@@ -35,6 +35,11 @@ const Title=styled.input`
     margin-bottom: 5px;
 `;
 
+const Lined=styled.div`
+    width: 100%;
+    height: 5px;
+    background-color: black;
+`;
 const List=styled.div`
     width: 100%;
     height: 100%;
@@ -190,6 +195,7 @@ export default function Notes(props) {
   return (
     <Container bgcolor={currbgcolor}>
         <Title value={title} onChange={changeTitle} fcolor={currfcolor}/>
+        <Lined/>
         <List>
             {    
                 list.map((item,index)=>(

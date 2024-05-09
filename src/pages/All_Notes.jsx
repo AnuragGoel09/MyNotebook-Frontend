@@ -14,6 +14,7 @@ import ChecklistContext from '../context/checklists/checklistContext';
 import LoadingBar from 'react-top-loading-bar';
 import {apiURL} from '../config';
 import { mobile } from '../responsive';
+import Loader from '../components/Loader';
 const Container=styled.div`
     width: 100vw;
     box-sizing: border-box;
@@ -50,7 +51,7 @@ const Delete=styled.div`
     display: none;
     top: 0;
     right: 0;
-    background-color: grey;
+    background-color: black;
     border-radius: 10px;
     padding: 2px;
     color: white;
@@ -71,7 +72,7 @@ export default function All_Notes() {
     const [alllists,setAlllists]=useState([]);
     const {deleteNote}=useContext(NoteContext);
     const {deleteList}=useContext(ChecklistContext);
-    const [progress,updateProgress]=useState(0);
+    const [progress,updateProgress]=useState(true);
 useEffect(()=>{
     const getAllNOtes=async()=>{
 
@@ -89,7 +90,6 @@ useEffect(()=>{
         } catch (error) {
       
         }
-        updateProgress(70);
         try {
             const response = await fetch(`${apiURL}/api/lists/alllists`, {
                 method: 'GET',
@@ -105,21 +105,23 @@ useEffect(()=>{
         } catch (error) {
             
         }
-        updateProgress(100);
+        updateProgress(false);
     }
-    updateProgress(30);
     getAllNOtes();
-    },[loginState]);
+    },[]);
     useEffect(()=>{
-        if(progress===100){
+        if(progress===false){
             setShow(true);
         }
     },[progress])
   
     const [show,setShow]=useState(false);
     return (
-    <Container>  
-      <Navbar/>
+        <>
+        <Navbar/>
+        {progress && <Loader/>}
+        {!progress &&
+    <Container>
       <LoadingBar
             color='#f11946'
             progress={progress}
@@ -131,7 +133,6 @@ useEffect(()=>{
         <Wrapper>
         {   show && 
                 allnotes.map((note)=>(
-                    
                     <Box  key={note._id}>
                         <Popup
                             trigger={<Button key={note._id}><NoteLink note={note}/></Button>}
@@ -139,9 +140,9 @@ useEffect(()=>{
                             >
                             <Notes  key={note._id} note={note}/>
                         </Popup>
-                        <Delete className='del' onClick={()=>{
+                        {/* <Delete className='del' onClick={()=>{
                             deleteNote(note._id)
-                        }}><DeleteIcon style={{fontSize:'20px'}}/></Delete>
+                        }}><DeleteIcon style={{fontSize:'20px'}}/></Delete> */}
                     </Box>
                 ))
             }
@@ -154,14 +155,16 @@ useEffect(()=>{
                             >
                             <CheckList key={checklist._id} checklist={checklist}/>
                         </Popup>
-                        <Delete className='del' onClick={()=>{
+                        {/* <Delete className='del' onClick={()=>{
                             deleteList(checklist._id)
-                        }}><DeleteIcon style={{fontSize:'20px'}}/></Delete>
+                        }}><DeleteIcon style={{fontSize:'20px'}}/></Delete> */}
                     </Box>
 
                 ))
             }
         </Wrapper>
     </Container>
+    }
+    </>
   );
 }

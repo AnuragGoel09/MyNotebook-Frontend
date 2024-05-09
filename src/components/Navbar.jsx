@@ -54,6 +54,7 @@ const Item=styled(Link)`
 const Name=styled.span`
 font-size: 18px;
 display: flex;
+color: white;
 align-items: center;
 gap: 5px;
 `;

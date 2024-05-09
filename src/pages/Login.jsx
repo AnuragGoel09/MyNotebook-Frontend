@@ -27,7 +27,7 @@ const Title=styled.div`
     font-weight: bold;
     display: flex;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    color: #5356FF;
+    color: black;
     z-index: 99;
 `;
 const Img=styled.img`
@@ -45,7 +45,7 @@ const Box=styled.div`
     max-width: 400px;
     margin: 0 auto;
     padding: 1em;
-    background-color: #5356FF;
+    background-color: black;
     border-radius: 25px;
 `;
 const Head=styled.div`
@@ -63,7 +63,7 @@ const Input=styled.input`
     outline: none;
     border: none;
     padding: 1em;
-    color:#5356FF;
+    color:black;
     margin-bottom:2em;
     box-sizing: border-box;
     margin-bottom: 30px;
@@ -81,7 +81,7 @@ const Submit=styled.button`
     outline: none;
     border: none;
     padding: 1em;
-    color:#5356FF;
+    color:black;
     margin-bottom:2em;
     box-sizing: border-box;
     margin-bottom: 30px;

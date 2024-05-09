@@ -12,18 +12,19 @@ const Container=styled.div`
     box-sizing: border-box;
     height: 50px;
     padding: 0px 10px;
-    background-color: white;
+    background-color: black;
     ${tablet({flexDirection:'column',height:'fit-content'})}
 `;
 
 const Left=styled.div`
   ${mobile({width:'100%',textAlign:'left',marginBottom:'5px'})}
-  ${tablet({marginBottom:'5px'})}
+  ${tablet({marginBottom:'5px',marginTop:'10px'})}
 `;
 
 const Logo=styled.span`
     font-size: 20px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    color: whitesmoke;
 `;
 
 const Center=styled.div``;
@@ -36,13 +37,16 @@ const Menu=styled.div`
 
 const Item=styled(Link)`
     text-decoration: none;
+    background-color: whitesmoke;
     color: black;
     display: flex;
     gap: 5px;
-    padding: 10px;
+    padding: 5px 10px;
     border-radius: 10px;
+    transition: all 0.2s ease;
     &:hover{
-        background-color: rgba(0,0,0,0.1);
+        background-color: grey;
+        transform: scale(1.1);
     };
     cursor: pointer;
 `;
@@ -56,15 +60,16 @@ gap: 5px;
 
 const Logout=styled(Link)`
   cursor: pointer;
+  background-color: white;
   color:black;
   text-decoration: none;
   padding: 8px;
   border-radius: 10px;
   transition: all 0.2s ease;
   &:hover{
-    transform: scale(1.1);
-    background-color: rgba(0,0,0,0.1);
-  }
+        background-color: grey;
+        transform: scale(1.1);
+    };
 `;
 
 const Right=styled.div`

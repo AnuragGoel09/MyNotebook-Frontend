@@ -7,6 +7,7 @@ import Edit_Notebook from './Edit_Notebook';
 import DeleteIcon from '@mui/icons-material/Delete';
 import NotebookContext from '../context/notebooks/notebookContext';
 import {motion} from 'framer-motion';
+import BounceLoader from "react-spinners/BounceLoader";
 
 const Container=styled.div`
   position: relative;
@@ -72,30 +73,25 @@ const Name=styled.div`
   color: rgba(0,0,0,0.8);
   font-weight: 400;
 `;
+
+const Load=styled.div`
+`;
+
 export default function Notebook_Link(props) {
   const {deleteNotebook}=useContext(NotebookContext)
   const navigate=useNavigate();
   const deleteNB=()=>{
       deleteNotebook(props.notebook._id);
   }
-  const [isClicked, setIsClicked] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
-  const zoomIn = () => {
-    setIsClicked(true);
-  };
-
-  const zoomOut = () => {
-    setIsClicked(false);
-  };
   return (
-    <Container>
+    <>
+      {isDelete && <Load><BounceLoader color="black"/></Load>}
+      {!isDelete && <Container>
         <Img onClick={()=>{
                   navigate(`/${props.notebook._id}`);
                 }}
             src={props.notebook.image}
-            initial={{ y: 0 }}
-            animate={{ y: isClicked ? '-100vh' : 0 }}
-            transition={{ duration: 0.6 }}
         />
       <Name>{props.notebook.title}</Name>
       <Popup
@@ -104,21 +100,17 @@ export default function Notebook_Link(props) {
             >
             <Edit_Notebook notebook={props.notebook}/>
         </Popup>
-       <Delete 
-              whileTap={{ scale: 0.9 }}
-              initial={{ scale: 1 }}
-              animate={{ scale: isDelete ? 2 : 1 }}
-              transition={{ duration: 0.5 }}    
-              onClick={()=>{
+       <Delete onClick={()=>{
                   setIsDelete(true);
                   setTimeout(()=>{
-                    setIsDelete(false);
                   },200);
                   deleteNB();
 
                 }
               }
               ><DeleteIcon  style={{color:'white'}}/></Delete> 
-    </Container>
+              </Container>}
+              </>
   );
+
 }

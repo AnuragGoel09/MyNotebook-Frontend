@@ -9,6 +9,8 @@ import LoginContext from '../context/login/loginContext';
 import {motion} from 'framer-motion';
 import LoadingBar from 'react-top-loading-bar'
 import {mobile} from '../responsive';
+import Loader from '../components/Loader';
+import BounceLoader from "react-spinners/BounceLoader";
 
 const Container=styled.div`
     width: 100vw;
@@ -23,22 +25,24 @@ const Head=styled.span`
     justify-content: center;
     box-sizing: border-box;
     padding: 10px;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;   
     font-size: 25px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
 `;
 
-const AddNotebook=styled(motion.div)`
+const AddNotebook=styled.div`
     position: absolute;
     right: 40px;
     display: flex;
     align-items: center;
     font-size: 17px;
-    padding: 5px;
-    &:hover{
-        background-color: rgba(0,0,0,0.05);
-    };
+    padding: 5px 10px;
+    border-radius: 10px;
     cursor: pointer;
-    ${mobile({display:'none'})} 
+    ${mobile({display:'none'})}; 
+    transition: all 0.2s ease;
+    &:hover{
+        transform: scale(1.1);
+    }
 `;
 
 const Wrapper=styled.div`
@@ -73,58 +77,32 @@ export default function Home() {
     const {loginState}=useContext(LoginContext);
     const {notebooks,addNotebook,getNotebooks}=useContext(NotebookContext);
     const [isZoomed, setIsZoomed] = useState(false);
-    const [progress,updateProgress]=useState(0);
+    const [progress,updateProgress]=useState(true);
+    const [addProgress,setAddProgress]=useState(false);
     useEffect(()=>{
         if(loginState){
-            updateProgress(50);
             getNotebooks();
-            updateProgress(100);
+            updateProgress(false)
         }
     },[loginState])
+    useEffect(()=>{
+        setAddProgress(false)
+    },[notebooks])
   return (
     <>{loginState===null && <Navigate to="/login"/>}
-        <Navbar/>
-        <LoadingBar
-            color='#f11946'
-            progress={progress}
-            onLoaderFinished={()=>updateProgress(0)}
-        />
+        {progress && <Loader/>}
+        {!progress &&
+    <>
+    <Navbar/>
        <Container>
             <Head>
-                Notebooks
-                <AddNotebook
-                    whileTap={{ scale: 0.9 }}
-                    initial={{ scale: 1 }}
-                    animate={{ scale: isZoomed ? 1.5 : 1 }}
-                    transition={{ duration: 0.5 }}    
-                    onClick={()=>{
-                        setIsZoomed(true);
-                        updateProgress(30);
-                        setTimeout(()=>{
-                            addNotebook();
-                            setIsZoomed(false);
-                            updateProgress(100);
-                        },500);
-                        
-                    }}><AddIcon/> Notebook</AddNotebook>
+                My Notebooks
+                <AddNotebook onClick={()=>{
+                    addNotebook();
+                    setAddProgress(true);
+                }}>{addProgress==false?<><AddIcon/>Notebook</>:<BounceLoader size="30" color="black"/>}</AddNotebook>
             </Head>
             <Wrapper>
-                <MobileAdd whileTap={{ scale: 0.9 }}
-                    initial={{ scale: 1 }}
-                    animate={{ scale: isZoomed ? 1.5 : 1 }}
-                    transition={{ duration: 0.5 }}    
-                    onClick={()=>{
-                        setIsZoomed(true);
-                        updateProgress(30);
-                        setTimeout(()=>{
-                            addNotebook();
-                            setIsZoomed(false);
-                            updateProgress(100);
-                        },500);
-                        
-                    }}>
-                    <AddIcon style={{fontSize:'40px'}}/>
-                </MobileAdd>
                 {  
                     notebooks.map((notebook)=>(
                         <NotebookLink key={notebook._id} notebook={notebook}/>
@@ -132,6 +110,8 @@ export default function Home() {
                 }
             </Wrapper>
         </Container>
+        </>
+        }
     </>
   );
 }

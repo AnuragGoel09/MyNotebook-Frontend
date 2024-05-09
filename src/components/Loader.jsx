@@ -20,7 +20,7 @@ const Title=styled.div`
     font-weight: bold;
     display: flex;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-    color: #5356FF;
+    color: black;
     z-index: 99;
 `;
 
@@ -29,7 +29,7 @@ export default function Loader() {
     <>
       <Container>
       <Title>My Notebook</Title>
-        <BounceLoader color="#5356FF"/>
+        <BounceLoader color="black"/>
       </Container>
     </>
   )
